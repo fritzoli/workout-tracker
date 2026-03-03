@@ -1,22 +1,26 @@
 package com.fritzoli.workouttracker.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "USERS")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Column(name = "user_name", nullable = false, unique = true)
-    private String userName;
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -27,11 +31,13 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
 
-    @OneToMany
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private List<Weight> weights;
-
     @Column(name = "creation_date")
     @CreationTimestamp
-    private LocalDateTime creationDate;
+    private LocalDateTime creationdate;
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 }
