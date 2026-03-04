@@ -1,8 +1,9 @@
 package com.fritzoli.workouttracker.controller;
 
-import com.fritzoli.workouttracker.dto.UserRequest;
-import com.fritzoli.workouttracker.model.User;
+import com.fritzoli.workouttracker.dto.request.UserRequest;
 import com.fritzoli.workouttracker.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,13 +19,19 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody UserRequest user) {
-        return service.register(user);
+    public ResponseEntity<?> register(@RequestBody UserRequest user) {
+        if (service.register(user)) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserRequest user) throws NoSuchAlgorithmException {
-        return service.login(user);
+    public ResponseEntity<?> login(@RequestBody UserRequest user) throws NoSuchAlgorithmException {
+        if (service.login(user) != null) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

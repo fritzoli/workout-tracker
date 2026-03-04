@@ -1,6 +1,6 @@
 package com.fritzoli.workouttracker.service;
 
-import com.fritzoli.workouttracker.dto.UserRequest;
+import com.fritzoli.workouttracker.dto.request.UserRequest;
 import com.fritzoli.workouttracker.model.User;
 import com.fritzoli.workouttracker.repository.IUserRepo;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,10 +25,17 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
-    public User register(UserRequest user) {
-        User u = new User(user.username(), user.password(), user.email());
-        u.setPassword(encoder.encode(user.password()));
-        return repo.save(u);
+    public boolean register(UserRequest user) {
+        try {
+            User u = new User(user.username(), user.password(), user.email());
+            u.setPassword(encoder.encode(user.password()));
+            repo.save(u);
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+
+        return true;
     }
 
     public String login(UserRequest user) throws NoSuchAlgorithmException {
@@ -39,6 +46,6 @@ public class UserService {
            return jwtService.generateToken(user.username());
        }
 
-       return "failure";
+       return null;
     }
 }
