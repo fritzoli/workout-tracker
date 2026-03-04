@@ -1,6 +1,7 @@
 package com.fritzoli.workouttracker.service;
 
 import com.fritzoli.workouttracker.dto.request.UserRequest;
+import com.fritzoli.workouttracker.exception.custom.UserAlreadyExistsException;
 import com.fritzoli.workouttracker.model.User;
 import com.fritzoli.workouttracker.repository.IUserRepo;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,17 +26,13 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
-    public boolean register(UserRequest user) {
-        try {
-            User u = new User(user.username(), user.password(), user.email());
-            u.setPassword(encoder.encode(user.password()));
-            repo.save(u);
-        } catch (Exception e) {
-            System.out.println(e);
-            return false;
-        }
+    public void register(UserRequest user) {
+        if (repo.findByUsername(user.username()).isPresent()) throw new UserAlreadyExistsException("username");
+        if (repo.findByEmail(user.email()).isPresent()) throw new UserAlreadyExistsException("email");
 
-        return true;
+        User u = new User(user.username(), user.password(), user.email());
+        u.setPassword(encoder.encode(user.password()));
+        repo.save(u);
     }
 
     public String login(UserRequest user) throws NoSuchAlgorithmException {
