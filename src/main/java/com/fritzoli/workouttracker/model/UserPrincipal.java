@@ -1,6 +1,6 @@
 package com.fritzoli.workouttracker.model;
 
-import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+@NullMarked
 public class UserPrincipal implements UserDetails {
     private final User user;
 
@@ -21,7 +22,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     @Override
-    public @Nullable String getPassword() {
+    public String getPassword() {
         return user.getPassword();
     }
 

@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.serive;
+package com.fritzoli.workouttracker.service;
 
 import com.fritzoli.workouttracker.model.User;
 import com.fritzoli.workouttracker.model.UserPrincipal;
@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
@@ -18,13 +20,13 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = repo.findByUsername(username);
+        Optional<User> user = repo.findByUsername(username);
 
-        if (user == null) {
+        if (user.isEmpty()) {
             System.out.println("user not found");
             throw new UsernameNotFoundException("user not found");
         }
 
-        return new UserPrincipal(user);
+        return new UserPrincipal(user.get());
     }
 }
