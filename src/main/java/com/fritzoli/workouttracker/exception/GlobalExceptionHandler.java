@@ -6,15 +6,20 @@ import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedExceptio
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> ResourceAlreadyExists(ResourceAlreadyExistsException ex, HttpServletRequest request) {
-        ErrorResponse error = new ErrorResponse(
+    public ResponseEntity<ErrorResponse<String>> ResourceAlreadyExists(ResourceAlreadyExistsException ex, HttpServletRequest request) {
+        ErrorResponse<String> error = new ErrorResponse<>(
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
                 ex.getMessage(),
@@ -24,8 +29,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotAuthenticatedException.class)
-    public ResponseEntity<ErrorResponse> ResourceAlreadyExists(UserNotAuthenticatedException ex, HttpServletRequest request) {
-        ErrorResponse error = new ErrorResponse(
+    public ResponseEntity<ErrorResponse<String>> ResourceAlreadyExists(UserNotAuthenticatedException ex, HttpServletRequest request) {
+        ErrorResponse<String> error = new ErrorResponse<>(
                 HttpStatus.UNAUTHORIZED .value(),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(),
                 ex.getMessage(),
@@ -34,9 +39,26 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse<Map<String, String>>> MethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        Map<String, String> res = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            res.put(fieldName, error.getDefaultMessage());
+        });
+
+        ErrorResponse<Map<String, String>> error = new ErrorResponse<>(
+                HttpStatus.BAD_REQUEST .value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                res,
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex, HttpServletRequest request) {
-        ErrorResponse error = new ErrorResponse(
+    public ResponseEntity<ErrorResponse<String>> handleGeneric(Exception ex, HttpServletRequest request) {
+        ErrorResponse<String> error = new ErrorResponse<>(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 ex.getMessage(),

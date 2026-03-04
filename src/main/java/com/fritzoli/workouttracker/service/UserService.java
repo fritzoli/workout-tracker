@@ -1,6 +1,7 @@
 package com.fritzoli.workouttracker.service;
 
-import com.fritzoli.workouttracker.dto.request.UserRequest;
+import com.fritzoli.workouttracker.dto.request.BasicLoginRequest;
+import com.fritzoli.workouttracker.dto.request.RegisterRequest;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
 import com.fritzoli.workouttracker.model.User;
@@ -27,7 +28,7 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
-    public void register(UserRequest user) {
+    public void register(RegisterRequest user) {
         if (repo.findByUsername(user.username()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the name: " + user.username());
         if (repo.findByEmail(user.email()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the email: " + user.email());
 
@@ -36,7 +37,7 @@ public class UserService {
         repo.save(u);
     }
 
-    public String login(UserRequest user) throws NoSuchAlgorithmException {
+    public String login(BasicLoginRequest user) throws NoSuchAlgorithmException {
        Authentication authentication =
                authManager.authenticate(new UsernamePasswordAuthenticationToken(user.username(), user.password()));
 
