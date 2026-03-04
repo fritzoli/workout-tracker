@@ -1,7 +1,8 @@
 package com.fritzoli.workouttracker.service;
 
 import com.fritzoli.workouttracker.dto.request.UserRequest;
-import com.fritzoli.workouttracker.exception.custom.UserAlreadyExistsException;
+import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
+import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
 import com.fritzoli.workouttracker.model.User;
 import com.fritzoli.workouttracker.repository.IUserRepo;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,8 +28,8 @@ public class UserService {
     }
 
     public void register(UserRequest user) {
-        if (repo.findByUsername(user.username()).isPresent()) throw new UserAlreadyExistsException("username");
-        if (repo.findByEmail(user.email()).isPresent()) throw new UserAlreadyExistsException("email");
+        if (repo.findByUsername(user.username()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the name: " + user.username());
+        if (repo.findByEmail(user.email()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the email: " + user.email());
 
         User u = new User(user.username(), user.password(), user.email());
         u.setPassword(encoder.encode(user.password()));
@@ -39,10 +40,10 @@ public class UserService {
        Authentication authentication =
                authManager.authenticate(new UsernamePasswordAuthenticationToken(user.username(), user.password()));
 
-       if (authentication.isAuthenticated()){
-           return jwtService.generateToken(user.username());
-       }
+        if (!authentication.isAuthenticated()) {
+            throw new UserNotAuthenticatedException("Could not authenticate user with the username: " + user.username());
+        }
 
-       return null;
+        return jwtService.generateToken(user.username());
     }
 }

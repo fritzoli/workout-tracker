@@ -26,8 +26,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserRequest user) throws NoSuchAlgorithmException {
-        if (service.login(user) != null) {
-            return new ResponseEntity<>(HttpStatus.OK);
+        String token = service.login(user);
+        if (token != null) {
+            return new ResponseEntity<>(token, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
