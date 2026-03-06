@@ -1,7 +1,7 @@
 package com.fritzoli.workouttracker.service;
 
-import com.fritzoli.workouttracker.model.User;
-import com.fritzoli.workouttracker.model.UserPrincipal;
+import com.fritzoli.workouttracker.model.user.User;
+import com.fritzoli.workouttracker.model.user.UserPrincipal;
 import com.fritzoli.workouttracker.repository.IUserRepo;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -2,7 +2,7 @@ package com.fritzoli.workouttracker.service;
 
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
-import com.fritzoli.workouttracker.model.Weight;
+import com.fritzoli.workouttracker.model.user.Weight;
 import com.fritzoli.workouttracker.repository.IUserRepo;
 import com.fritzoli.workouttracker.repository.IWeightRepository;
 import org.springframework.security.core.userdetails.UserDetails;

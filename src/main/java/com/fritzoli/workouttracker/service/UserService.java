@@ -4,7 +4,7 @@ import com.fritzoli.workouttracker.dto.request.BasicLoginRequest;
 import com.fritzoli.workouttracker.dto.request.RegisterRequest;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
-import com.fritzoli.workouttracker.model.User;
+import com.fritzoli.workouttracker.model.user.User;
 import com.fritzoli.workouttracker.repository.IUserRepo;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

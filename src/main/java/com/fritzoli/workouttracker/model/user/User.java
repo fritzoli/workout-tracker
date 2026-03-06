@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.model;
+package com.fritzoli.workouttracker.model.user;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -31,8 +31,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
 
-    @Column(name = "creation_date")
     @CreationTimestamp
+    @Column(name = "creation_date")
     private LocalDateTime creationdate;
 
     public User(String username, String password, String email) {

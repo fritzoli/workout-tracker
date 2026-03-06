@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.model;
+package com.fritzoli.workouttracker.model.user;
 
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
