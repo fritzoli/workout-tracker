@@ -8,11 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.NoSuchAlgorithmException;
 
 @RestController
+@RequestMapping("/api/user")
 public class UserController {
     private final UserService service;
 
@@ -23,16 +24,16 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterRequest user) {
         service.register(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody BasicLoginRequest user) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> login(@RequestBody BasicLoginRequest user) {
         String token = service.login(user);
         if (token != null) {
-            return new ResponseEntity<>(token, HttpStatus.OK);
+            return ResponseEntity.ok(token);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok().build();
     }
 
 }
