@@ -2,6 +2,7 @@ package com.fritzoli.workouttracker.controller;
 
 import com.fritzoli.workouttracker.service.WeightTrackingService;
 import jakarta.validation.constraints.Positive;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Validated
 @RestController
-@RequestMapping("/api/weight-tracking")
+@RequestMapping("/api/v1/weights")
 public class WeightTrackingController {
     private final WeightTrackingService weightTrackingService;
 
@@ -23,16 +24,16 @@ public class WeightTrackingController {
             @PathVariable
             @Positive(message = "Weight must be positive") double weight,
             @AuthenticationPrincipal UserDetails userDetails) {
-        weightTrackingService.setUserWeight(weight, userDetails);
-        return ResponseEntity.ok().build();
+        var res = weightTrackingService.setUserWeight(weight, userDetails);
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/update/{weight}")
+    @PatchMapping("/{weight}")
     public ResponseEntity<?> updateUserWeight(
             @PathVariable
             @Positive(message = "Weight must be positive") double weight,
             @AuthenticationPrincipal UserDetails userDetails) {
-        weightTrackingService.updateUserWeight(weight, userDetails);
-        return ResponseEntity.ok().build();
+        var res = weightTrackingService.updateUserWeight(weight, userDetails);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.service;
+package com.fritzoli.workouttracker.service.jwt;
 
 import com.fritzoli.workouttracker.model.user.User;
 import com.fritzoli.workouttracker.model.user.UserPrincipal;

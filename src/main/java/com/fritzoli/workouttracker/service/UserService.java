@@ -2,10 +2,12 @@ package com.fritzoli.workouttracker.service;
 
 import com.fritzoli.workouttracker.dto.request.BasicLoginRequest;
 import com.fritzoli.workouttracker.dto.request.RegisterRequest;
+import com.fritzoli.workouttracker.dto.response.UserResponse;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
 import com.fritzoli.workouttracker.model.user.User;
 import com.fritzoli.workouttracker.repository.IUserRepository;
+import com.fritzoli.workouttracker.service.jwt.JWTService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,13 +28,14 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
-    public void register(RegisterRequest user) {
+    public UserResponse register(RegisterRequest user) {
         if (repo.findByUsername(user.username()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the name: " + user.username());
         if (repo.findByEmail(user.email()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the email: " + user.email());
 
         User u = new User(user.username(), user.password(), user.email());
         u.setPassword(encoder.encode(user.password()));
         repo.save(u);
+        return new UserResponse(u.getUsername(), u.getEmail(), u.getRole() , u.getCreationdate());
     }
 
     public String login(BasicLoginRequest user) {

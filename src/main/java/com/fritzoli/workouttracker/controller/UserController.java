@@ -2,6 +2,7 @@ package com.fritzoli.workouttracker.controller;
 
 import com.fritzoli.workouttracker.dto.request.BasicLoginRequest;
 import com.fritzoli.workouttracker.dto.request.RegisterRequest;
+import com.fritzoli.workouttracker.dto.response.UserResponse;
 import com.fritzoli.workouttracker.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService service;
 
@@ -22,9 +23,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegisterRequest user) {
-        service.register(user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<UserResponse> register(@RequestBody @Valid RegisterRequest user) {
+        var res = service.register(user);
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

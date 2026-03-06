@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.service;
+package com.fritzoli.workouttracker.service.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

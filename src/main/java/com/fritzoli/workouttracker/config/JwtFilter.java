@@ -1,7 +1,7 @@
 package com.fritzoli.workouttracker.config;
 
-import com.fritzoli.workouttracker.service.JWTService;
-import com.fritzoli.workouttracker.service.MyUserDetailsService;
+import com.fritzoli.workouttracker.service.jwt.JWTService;
+import com.fritzoli.workouttracker.service.jwt.MyUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

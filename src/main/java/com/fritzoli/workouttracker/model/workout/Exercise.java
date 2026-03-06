@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +30,7 @@ public class Exercise {
 
     private String description;
 
-    @Timestamp
+    @CreationTimestamp
     @Column(name = "creation_date")
     private LocalDateTime creationdate;
 

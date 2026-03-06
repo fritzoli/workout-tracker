@@ -1,6 +1,7 @@
 package com.fritzoli.workouttracker.service;
 
 import com.fritzoli.workouttracker.dto.request.ExerciseRequest;
+import com.fritzoli.workouttracker.dto.response.ExerciseResponse;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
 import com.fritzoli.workouttracker.model.workout.Exercise;
@@ -19,14 +20,16 @@ public class WorkoutService {
         this.userRepository = userRepository;
     }
 
-    public void createExercise(ExerciseRequest exercise, UserDetails userDetails) {
-        var e = exerciseRepository.findExerciseByTitle(userDetails.getUsername());
+    public ExerciseResponse createExercise(ExerciseRequest exercise, UserDetails userDetails) {
+        var e = exerciseRepository.findExerciseByTitle(exercise.title());
         if (e.isPresent()) {
             throw new ResourceAlreadyExistsException("Exercise already exists");
         }
         var user = userRepository.findByUsername(userDetails.getUsername());
         Exercise res = new Exercise(user.get(), exercise.title(), exercise.description());
         exerciseRepository.save(res);
+
+        return new ExerciseResponse(res.getId(), res.getTitle(), res.getDescription(), res.getCreationdate());
     }
 }
 
