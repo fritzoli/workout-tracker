@@ -5,7 +5,7 @@ import com.fritzoli.workouttracker.dto.request.RegisterRequest;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
 import com.fritzoli.workouttracker.model.user.User;
-import com.fritzoli.workouttracker.repository.IUserRepo;
+import com.fritzoli.workouttracker.repository.IUserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    private final IUserRepo repo;
+    private final IUserRepository repo;
     private final JWTService jwtService;
     private final AuthenticationManager authManager;
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    public UserService(IUserRepo repo, AuthenticationManager authManager, JWTService jwtService) {
+    public UserService(IUserRepository repo, AuthenticationManager authManager, JWTService jwtService) {
         this.repo = repo;
         this.authManager = authManager;
         this.jwtService = jwtService;

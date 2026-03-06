@@ -3,7 +3,7 @@ package com.fritzoli.workouttracker.service;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
 import com.fritzoli.workouttracker.model.user.Weight;
-import com.fritzoli.workouttracker.repository.IUserRepo;
+import com.fritzoli.workouttracker.repository.IUserRepository;
 import com.fritzoli.workouttracker.repository.IWeightRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -12,10 +12,10 @@ import java.time.LocalDate;
 
 @Service
 public class WeightTrackingService {
-    private final IUserRepo userRepo;
+    private final IUserRepository userRepo;
     private final IWeightRepository weightRepo;
 
-    public WeightTrackingService(IUserRepo userRepo, IWeightRepository weightRepo) {
+    public WeightTrackingService(IUserRepository userRepo, IWeightRepository weightRepo) {
         this.userRepo = userRepo;
         this.weightRepo = weightRepo;
     }

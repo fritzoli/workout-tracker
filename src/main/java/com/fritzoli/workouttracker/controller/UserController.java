@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody BasicLoginRequest user) {
+    public ResponseEntity<?> login(@RequestBody @Valid BasicLoginRequest user) {
         String token = service.login(user);
         if (token != null) {
             return ResponseEntity.ok(token);
