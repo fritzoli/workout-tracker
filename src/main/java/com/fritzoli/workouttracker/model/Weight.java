@@ -4,13 +4,15 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "WEIGHT")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Weight {
     @Id
@@ -23,7 +25,7 @@ public class Weight {
 
     @Column(name = "creation_date")
     @CreationTimestamp
-    private LocalDateTime creationDate;
+    private LocalDate creationDate;
 
     @Column(nullable = false)
     private double weight;

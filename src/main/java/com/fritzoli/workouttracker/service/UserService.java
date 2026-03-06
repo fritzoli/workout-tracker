@@ -12,8 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.NoSuchAlgorithmException;
-
 @Service
 public class UserService {
     private final IUserRepo repo;
@@ -37,8 +35,9 @@ public class UserService {
         repo.save(u);
     }
 
-    public String login(BasicLoginRequest user) throws NoSuchAlgorithmException {
-       Authentication authentication =
+    public String login(BasicLoginRequest user) {
+
+        Authentication authentication =
                authManager.authenticate(new UsernamePasswordAuthenticationToken(user.username(), user.password()));
 
         if (!authentication.isAuthenticated()) {
