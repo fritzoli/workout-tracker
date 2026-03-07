@@ -3,6 +3,7 @@ package com.fritzoli.workouttracker.controller;
 import com.fritzoli.workouttracker.dto.request.BasicLoginRequest;
 import com.fritzoli.workouttracker.dto.request.RegisterRequest;
 import com.fritzoli.workouttracker.dto.response.UserResponse;
+import com.fritzoli.workouttracker.service.MailService;
 import com.fritzoli.workouttracker.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService service;
+    private final MailService mailService;
 
-    public UserController(UserService service) {
+    public UserController(UserService service, MailService mailService) {
         this.service = service;
+        this.mailService = mailService;
     }
 
     @PostMapping("/register")

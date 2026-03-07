@@ -14,8 +14,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -34,17 +32,26 @@ public class JWTService {
     }
 
 
-    public String generateToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
+    public String generateLoginToken(String username) {
         Instant now = Instant.now();
 
         return Jwts.builder()
-                .claims()
-                .add(claims)
                 .subject(username)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plus(Duration.ofMinutes(15))))
-                .and()
+                .signWith(getKey())
+                .compact();
+    }
+
+    public String generateEmailVerificationToken(String username, String email) {
+        Instant now = Instant.now();
+
+        return Jwts.builder()
+                .subject(username)
+                .claim("email", email)
+                .claim("purpose", "email_verification")
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(now.plus(Duration.ofDays(7))))
                 .signWith(getKey())
                 .compact();
     }

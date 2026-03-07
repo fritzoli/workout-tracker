@@ -8,11 +8,13 @@ import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedExceptio
 import com.fritzoli.workouttracker.model.user.User;
 import com.fritzoli.workouttracker.repository.IUserRepository;
 import com.fritzoli.workouttracker.service.jwt.JWTService;
+import org.springframework.mail.MailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class UserService {
@@ -28,6 +30,7 @@ public class UserService {
         this.jwtService = jwtService;
     }
 
+    //Todo: mail verification (nur einmal zulassen), db anpassen
     public UserResponse register(RegisterRequest user) {
         if (repo.findByUsername(user.username()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the name: " + user.username());
         if (repo.findByEmail(user.email()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the email: " + user.email());
@@ -47,6 +50,12 @@ public class UserService {
             throw new UserNotAuthenticatedException("Could not authenticate user with the username: " + user.username());
         }
 
-        return jwtService.generateToken(user.username());
+        return jwtService.generateLoginToken(user.username());
+    }
+
+    public void sendVerificationEmail(String username, String email) {
+        String token = jwtService.generateEmailVerificationToken(username, email);
+
+
     }
 }
