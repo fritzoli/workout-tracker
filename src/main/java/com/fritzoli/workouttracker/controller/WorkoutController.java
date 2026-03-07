@@ -23,7 +23,27 @@ public class WorkoutController {
     public ResponseEntity<ExerciseResponse> createExercise(
             @RequestBody @Valid ExerciseRequest exercise,
             @AuthenticationPrincipal UserDetails userDetails) {
+
         var res = workoutService.createExercise(exercise, userDetails);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/exercise/{id}")
+    public ResponseEntity<Void> deleteExercise(
+            @PathVariable String id,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        workoutService.deleteExercise(id, userDetails);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/exercise/{id}")
+    public ResponseEntity<ExerciseResponse> updateExercise(
+            @PathVariable String id,
+            @RequestBody ExerciseRequest request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        var res = workoutService.updateExercise(id, request, userDetails);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }
