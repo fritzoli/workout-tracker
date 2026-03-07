@@ -43,7 +43,7 @@ public class JWTService {
                 .compact();
     }
 
-    public String generateEmailVerificationToken(String username, String email) {
+    public String generateMailVerificationToken(String username, String email) {
         Instant now = Instant.now();
 
         return Jwts.builder()
@@ -51,7 +51,7 @@ public class JWTService {
                 .claim("email", email)
                 .claim("purpose", "email_verification")
                 .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plus(Duration.ofDays(7))))
+                .expiration(Date.from(now.plus(Duration.ofMinutes(15))))
                 .signWith(getKey())
                 .compact();
     }
