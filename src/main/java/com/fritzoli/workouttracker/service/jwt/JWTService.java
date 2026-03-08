@@ -65,6 +65,10 @@ public class JWTService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    private String extractPurpose(String token) {
+        return extractClaim(token, claims -> claims.get("purpose", String.class));
+    }
+
     private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
@@ -89,5 +93,13 @@ public class JWTService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public void validateVerifyToken(String token) {
+        if (isTokenExpired(token))
+            throw new RuntimeException("This link has expired");
+
+        if (!extractPurpose(token).equals("email_verification"))
+            throw new RuntimeException("This token is not for email verification");
     }
 }

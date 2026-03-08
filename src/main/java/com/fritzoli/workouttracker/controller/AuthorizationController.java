@@ -7,10 +7,7 @@ import com.fritzoli.workouttracker.service.AuthorizationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -28,14 +25,16 @@ public class AuthorizationController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping("/verify")
+    public ResponseEntity<UserResponse> verifyEmail(@RequestParam String token) {
+        var res = service.verifyToken(token);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid BasicLoginRequest user) {
         String token = service.login(user);
-        if (token != null) {
-            return ResponseEntity.ok(token);
-        }
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
 }

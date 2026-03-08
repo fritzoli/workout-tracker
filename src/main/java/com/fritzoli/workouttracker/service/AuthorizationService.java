@@ -4,6 +4,7 @@ import com.fritzoli.workouttracker.dto.request.BasicLoginRequest;
 import com.fritzoli.workouttracker.dto.request.RegisterRequest;
 import com.fritzoli.workouttracker.dto.response.UserResponse;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
+import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
 import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
 import com.fritzoli.workouttracker.model.user.User;
 import com.fritzoli.workouttracker.repository.IUserRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 
 @Service
@@ -50,9 +52,8 @@ public class AuthorizationService {
         Authentication authentication =
                authManager.authenticate(new UsernamePasswordAuthenticationToken(user.username(), user.password()));
 
-        if (!authentication.isAuthenticated()) {
+        if (!authentication.isAuthenticated())
             throw new UserNotAuthenticatedException("Could not authenticate user with the username: " + user.username());
-        }
 
         return jwtService.generateLoginToken(user.username());
     }
@@ -67,5 +68,22 @@ public class AuthorizationService {
                 "\nClick this to verify your email: " + verifyUrl;
 
         mailService.sendVerificationMail(mail, subject, message);
+    }
+
+    public UserResponse verifyToken(String token) {
+        jwtService.validateVerifyToken(token);
+        String userName = jwtService.extractUserName(token);
+        Optional<User> user = repo.findByUsername(userName);
+
+        if (user.isEmpty())
+            throw new ResourceNotFoundException("There is no user with the name: " + userName);
+        if (user.get().isEnabled())
+            throw new ResourceAlreadyExistsException("The user with the name: " + userName + " is already verified");
+
+        User entity = user.get();
+        entity.setEnabled(true);
+        repo.save(entity);
+
+        return new UserResponse(entity.getUsername(), entity.getEmail(), entity.getRole(), entity.getCreationdate());
     }
 }
