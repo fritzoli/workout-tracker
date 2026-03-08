@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.model;
+package com.fritzoli.workouttracker.model.user;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
         ErrorResponse<String> error = new ErrorResponse<>(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                ex.getMessage(),
+                "An unexpected error occurred.",
                 request.getRequestURI()
         );
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);

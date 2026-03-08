@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.service;
+package com.fritzoli.workouttracker.service.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -32,16 +32,26 @@ public class JWTService {
     }
 
 
-    public String generateToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
+    public String generateLoginToken(String username) {
+        Instant now = Instant.now();
 
         return Jwts.builder()
-                .claims()
-                .add(claims)
                 .subject(username)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60000 * 5))
-                .and()
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(now.plus(Duration.ofMinutes(15))))
+                .signWith(getKey())
+                .compact();
+    }
+
+    public String generateMailVerificationToken(String username, String email) {
+        Instant now = Instant.now();
+
+        return Jwts.builder()
+                .subject(username)
+                .claim("email", email)
+                .claim("purpose", "email_verification")
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(now.plus(Duration.ofMinutes(15))))
                 .signWith(getKey())
                 .compact();
     }
@@ -53,6 +63,10 @@ public class JWTService {
 
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    private String extractPurpose(String token) {
+        return extractClaim(token, claims -> claims.get("purpose", String.class));
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
@@ -79,5 +93,13 @@ public class JWTService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public void validateVerifyToken(String token) {
+        if (isTokenExpired(token))
+            throw new RuntimeException("This link has expired");
+
+        if (!extractPurpose(token).equals("email_verification"))
+            throw new RuntimeException("This token is not for email verification");
     }
 }
