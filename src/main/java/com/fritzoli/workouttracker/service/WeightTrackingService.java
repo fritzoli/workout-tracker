@@ -3,10 +3,11 @@ package com.fritzoli.workouttracker.service;
 import com.fritzoli.workouttracker.dto.response.WeightResponse;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
+import com.fritzoli.workouttracker.model.user.IUser;
+import com.fritzoli.workouttracker.model.user.User;
 import com.fritzoli.workouttracker.model.user.Weight;
 import com.fritzoli.workouttracker.repository.IUserRepository;
 import com.fritzoli.workouttracker.repository.IWeightRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,27 +22,24 @@ public class WeightTrackingService {
         this.weightRepo = weightRepo;
     }
 
-    public WeightResponse setUserWeight(double weight, UserDetails userDetails) {
-        var user = userRepo.findByUsername(userDetails.getUsername());
-        var dailyWeight = weightRepo.findByUserIdAndCreationDate(user.get().getId(), LocalDate.now());
+    public WeightResponse setUserWeight(double weight, IUser userDetails) {
+        var dailyWeight = weightRepo.findByUserIdAndCreationDate(userDetails.getId(), LocalDate.now());
 
-        if (dailyWeight.isPresent()) {
+        if (dailyWeight.isPresent())
             throw new ResourceAlreadyExistsException("There is already a weight entry for today");
-        }
 
-        Weight res = new Weight(user.get(), weight);
+        User user = userRepo.getReferenceById(userDetails.getId());
+        Weight res = new Weight(user, weight);
         weightRepo.save(res);
 
         return new WeightResponse(res.getId(), res.getWeight(), res.getCreationDate());
     }
 
-    public WeightResponse updateUserWeight(double weight, UserDetails userDetails) {
-        var user = userRepo.findByUsername(userDetails.getUsername());
-        var dailyWeight = weightRepo.findByUserIdAndCreationDate(user.get().getId(), LocalDate.now());
+    public WeightResponse updateUserWeight(double weight, IUser userDetails) {
+        var dailyWeight = weightRepo.findByUserIdAndCreationDate(userDetails.getId(), LocalDate.now());
 
-        if (dailyWeight.isEmpty()) {
+        if (dailyWeight.isEmpty())
             throw new ResourceNotFoundException("There is no weight entry for today");
-        }
 
         Weight res = dailyWeight.get();
         res.setWeight(weight);
