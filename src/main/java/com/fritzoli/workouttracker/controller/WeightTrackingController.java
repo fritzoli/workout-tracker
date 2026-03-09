@@ -1,11 +1,11 @@
 package com.fritzoli.workouttracker.controller;
 
+import com.fritzoli.workouttracker.model.user.IUser;
 import com.fritzoli.workouttracker.service.WeightTrackingService;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +23,7 @@ public class WeightTrackingController {
     public ResponseEntity<?> setUserWeight(
             @PathVariable
             @Positive(message = "Weight must be positive") double weight,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal IUser userDetails) {
         var res = weightTrackingService.setUserWeight(weight, userDetails);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
@@ -32,7 +32,7 @@ public class WeightTrackingController {
     public ResponseEntity<?> updateUserWeight(
             @PathVariable
             @Positive(message = "Weight must be positive") double weight,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal IUser userDetails) {
         var res = weightTrackingService.updateUserWeight(weight, userDetails);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

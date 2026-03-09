@@ -1,5 +1,6 @@
 package com.fritzoli.workouttracker.config;
 
+import com.fritzoli.workouttracker.model.user.IUser;
 import com.fritzoli.workouttracker.service.jwt.JWTService;
 import com.fritzoli.workouttracker.service.jwt.MyUserDetailsService;
 import jakarta.servlet.FilterChain;
@@ -10,7 +11,6 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(username);
+            IUser userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(username);
 
             if (jwtService.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken =
