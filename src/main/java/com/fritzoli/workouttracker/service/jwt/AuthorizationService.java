@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.service;
+package com.fritzoli.workouttracker.service.jwt;
 
 import com.fritzoli.workouttracker.dto.request.BasicLoginRequest;
 import com.fritzoli.workouttracker.dto.request.RegisterRequest;
@@ -8,7 +8,7 @@ import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
 import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
 import com.fritzoli.workouttracker.model.user.User;
 import com.fritzoli.workouttracker.repository.IUserRepository;
-import com.fritzoli.workouttracker.service.jwt.JWTService;
+import com.fritzoli.workouttracker.service.mail.MailService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

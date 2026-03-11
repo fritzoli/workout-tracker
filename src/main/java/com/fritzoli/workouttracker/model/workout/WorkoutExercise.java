@@ -39,4 +39,12 @@ public class WorkoutExercise {
     @CreationTimestamp
     @Column(name = "creation_date")
     private LocalDateTime creationdate;
+
+    public WorkoutExercise(Exercise exercise, Workout workout, int sets, int reps, int rpe) {
+        this.exercise = exercise;
+        this.workout = workout;
+        this.sets = sets;
+        this.reps = reps;
+        this.rpe = rpe;
+    }
 }
