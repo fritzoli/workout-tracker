@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.service;
+package com.fritzoli.workouttracker.service.mail;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

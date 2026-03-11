@@ -3,7 +3,7 @@ package com.fritzoli.workouttracker.controller;
 import com.fritzoli.workouttracker.dto.request.BasicLoginRequest;
 import com.fritzoli.workouttracker.dto.request.RegisterRequest;
 import com.fritzoli.workouttracker.dto.response.UserResponse;
-import com.fritzoli.workouttracker.service.AuthorizationService;
+import com.fritzoli.workouttracker.service.jwt.AuthorizationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
