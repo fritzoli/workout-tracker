@@ -7,16 +7,16 @@ import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
 import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
 import com.fritzoli.workouttracker.model.user.IUser;
 import com.fritzoli.workouttracker.model.workout.Exercise;
-import com.fritzoli.workouttracker.repository.IExerciseRepository;
-import com.fritzoli.workouttracker.repository.IUserRepository;
+import com.fritzoli.workouttracker.repository.workout.IExerciseRepository;
+import com.fritzoli.workouttracker.repository.user.IUserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WorkoutService {
+public class ExerciseService {
     private final IExerciseRepository exerciseRepository;
     private final IUserRepository userRepository;
 
-    public WorkoutService(IExerciseRepository exerciseRepository, IUserRepository userRepository) {
+    public ExerciseService(IExerciseRepository exerciseRepository, IUserRepository userRepository) {
         this.exerciseRepository = exerciseRepository;
         this.userRepository = userRepository;
     }
@@ -75,6 +75,16 @@ public class WorkoutService {
             throw new ResourceNotFoundException("The user doesn't have any exercises");
 
         return exercises;
+    }
+
+    public ExerciseResponse getExerciseById(String id, IUser userDetails) {
+        var exercise = exerciseRepository.findById(id);
+
+        if (exercise.isEmpty() || !exercise.get().getUser().getId().equals(userDetails.getId()))
+            throw new ResourceNotFoundException("Exercise not found");
+
+        var e = exercise.get();
+        return new ExerciseResponse(e.getId(), e.getTitle(), e.getDescription(), e.getCreationdate());
     }
 }
 

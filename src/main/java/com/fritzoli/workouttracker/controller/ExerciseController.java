@@ -3,7 +3,7 @@ package com.fritzoli.workouttracker.controller;
 import com.fritzoli.workouttracker.dto.request.ExerciseRequest;
 import com.fritzoli.workouttracker.dto.response.ExerciseResponse;
 import com.fritzoli.workouttracker.model.user.IUser;
-import com.fritzoli.workouttracker.service.WorkoutService;
+import com.fritzoli.workouttracker.service.ExerciseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/exercises")
 public class ExerciseController {
-    private final WorkoutService workoutService;
+    private final ExerciseService exerciseService;
 
-    public ExerciseController(WorkoutService workoutService) {
-        this.workoutService = workoutService;
+    public ExerciseController(ExerciseService exerciseService) {
+        this.exerciseService = exerciseService;
     }
 
     @PostMapping
@@ -25,7 +25,7 @@ public class ExerciseController {
             @RequestBody @Valid ExerciseRequest exercise,
             @AuthenticationPrincipal IUser userDetails) {
 
-        var res = workoutService.createExercise(exercise, userDetails);
+        var res = exerciseService.createExercise(exercise, userDetails);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
@@ -34,7 +34,7 @@ public class ExerciseController {
             @PathVariable String id,
             @AuthenticationPrincipal IUser userDetails) {
 
-        workoutService.deleteExercise(id, userDetails);
+        exerciseService.deleteExercise(id, userDetails);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -44,7 +44,7 @@ public class ExerciseController {
             @RequestBody ExerciseRequest request,
             @AuthenticationPrincipal IUser userDetails) {
 
-        var res = workoutService.updateExercise(id, request, userDetails);
+        var res = exerciseService.updateExercise(id, request, userDetails);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -54,8 +54,16 @@ public class ExerciseController {
             @Positive(message = "Page size must be positive") int size,
             @AuthenticationPrincipal IUser userDetails) {
 
-        var res = workoutService.getExercises(page, size, userDetails);
+        var res = exerciseService.getExercises(page, size, userDetails);
         return new ResponseEntity<>(res, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ExerciseResponse> getExerciseById(
+            @PathVariable String id,
+            @AuthenticationPrincipal IUser userDetails) {
+        var res = exerciseService.getExerciseById(id, userDetails);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

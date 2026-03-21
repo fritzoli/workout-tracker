@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.repository;
+package com.fritzoli.workouttracker.repository.workout;
 
 import com.fritzoli.workouttracker.dto.response.ExerciseResponse;
 import com.fritzoli.workouttracker.model.workout.Exercise;

@@ -6,8 +6,8 @@ import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
 import com.fritzoli.workouttracker.model.user.IUser;
 import com.fritzoli.workouttracker.model.user.User;
 import com.fritzoli.workouttracker.model.user.Weight;
-import com.fritzoli.workouttracker.repository.IUserRepository;
-import com.fritzoli.workouttracker.repository.IWeightRepository;
+import com.fritzoli.workouttracker.repository.user.IUserRepository;
+import com.fritzoli.workouttracker.repository.user.IWeightRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
