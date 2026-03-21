@@ -21,6 +21,7 @@ public class WorkoutExerciseService {
         var exercise = workoutExerciseRepository.findById(request.exerciseId())
                 .orElseThrow(() -> new ResourceNotFoundException("Exercise not found"));
 
-        var WorkoutExercise = new WorkoutExercise(request.workoutId(), request.sets(), request.reps());
+        //var WorkoutExercise = new WorkoutExercise(request.workoutId(), request.sets(), request.reps());
+        return null;
     }
 }

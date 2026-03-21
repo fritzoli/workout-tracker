@@ -37,8 +37,11 @@ public class AuthorizationService {
     }
 
     public void register(RegisterRequest user) {
-        if (repo.findByUsername(user.username()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the name: " + user.username());
-        if (repo.findByEmail(user.email()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the email: " + user.email());
+        if (repo.findByUsername(user.username()).isPresent())
+            throw new ResourceAlreadyExistsException("There already is a user with the name: " + user.username());
+
+        if (repo.findByEmail(user.email()).isPresent())
+            throw new ResourceAlreadyExistsException("There already is a user with the email: " + user.email());
 
         User entity = new User(user.username(), user.password(), user.email());
         entity.setPassword(encoder.encode(user.password()));
@@ -77,6 +80,7 @@ public class AuthorizationService {
 
         if (user.isEmpty())
             throw new ResourceNotFoundException("There is no user with the name: " + userName);
+
         if (user.get().isEnabled())
             throw new ResourceAlreadyExistsException("The user with the name: " + userName + " is already verified");
 

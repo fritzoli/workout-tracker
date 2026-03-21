@@ -33,4 +33,5 @@ build/
 .vscode/
 
 ### local variables and passwords ###
+/logs
 .env
