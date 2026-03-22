@@ -1,6 +1,6 @@
 package com.fritzoli.workouttracker.controller;
 
-import com.fritzoli.workouttracker.dto.request.ExerciseRequest;
+import com.fritzoli.workouttracker.dto.request.exercise.ExerciseRequest;
 import com.fritzoli.workouttracker.dto.response.ExerciseResponse;
 import com.fritzoli.workouttracker.model.user.IUser;
 import com.fritzoli.workouttracker.service.ExerciseService;

@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.dto.request;
+package com.fritzoli.workouttracker.dto.request.workout;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

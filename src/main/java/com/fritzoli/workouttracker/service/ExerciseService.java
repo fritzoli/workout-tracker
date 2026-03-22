@@ -1,6 +1,6 @@
 package com.fritzoli.workouttracker.service;
 
-import com.fritzoli.workouttracker.dto.request.ExerciseRequest;
+import com.fritzoli.workouttracker.dto.request.exercise.ExerciseRequest;
 import com.fritzoli.workouttracker.dto.response.ExerciseResponse;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
