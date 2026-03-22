@@ -23,7 +23,7 @@ public class WorkoutController {
 
     @PostMapping
     public ResponseEntity<WorkoutResponse> createWorkout(
-            @Valid CreateWorkoutRequest request,
+            @RequestBody @Valid CreateWorkoutRequest request,
             @AuthenticationPrincipal User userDetails) {
 
         var response = workoutService.createWorkout(request, userDetails);
@@ -42,7 +42,7 @@ public class WorkoutController {
     @PatchMapping("/{workoutId}")
     public ResponseEntity<WorkoutResponse> updateWorkout(
             @PathVariable String workoutId,
-            @Valid UpdateWorkoutRequest request,
+            @RequestBody @Valid UpdateWorkoutRequest request,
             @AuthenticationPrincipal IUser userDetails) {
 
         var response = workoutService.updateWorkout(workoutId, request, userDetails);

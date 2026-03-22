@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("/api/v1/workout-exercises")
@@ -17,7 +18,7 @@ public class WorkoutExerciseController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createWorkoutExercise(@Valid WorkoutExerciseRequest request) {
+    public ResponseEntity<?> createWorkoutExercise(@Valid @RequestBody WorkoutExerciseRequest request) {
         var res = workoutExerciseService.createWorkoutExercise(request);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }

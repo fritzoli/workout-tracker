@@ -3,10 +3,12 @@ package com.fritzoli.workouttracker.dto.request.workout;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fritzoli.workouttracker.utility.PatchField;
+
 import lombok.Getter;
 
 @Getter
 public class UpdateWorkoutRequest {
+    //Todo: Custom field Validation
     private PatchField<String> name = PatchField.notProvided();
     private PatchField<String> comment = PatchField.notProvided();
 

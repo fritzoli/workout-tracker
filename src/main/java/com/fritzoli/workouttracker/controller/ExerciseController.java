@@ -41,7 +41,7 @@ public class ExerciseController {
     @PutMapping("/{id}")
     public ResponseEntity<ExerciseResponse> updateExercise(
             @PathVariable String id,
-            @RequestBody ExerciseRequest request,
+            @RequestBody @Valid ExerciseRequest request,
             @AuthenticationPrincipal IUser userDetails) {
 
         var res = exerciseService.updateExercise(id, request, userDetails);
