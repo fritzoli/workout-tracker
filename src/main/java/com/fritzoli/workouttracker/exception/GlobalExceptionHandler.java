@@ -43,12 +43,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotAuthenticatedException.class)
     public ResponseEntity<ErrorResponse<String>> UserNotAuthenticated(UserNotAuthenticatedException ex, HttpServletRequest request) {
         ErrorResponse<String> error = new ErrorResponse<>(
-                HttpStatus.UNAUTHORIZED .value(),
-                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                HttpStatus.FORBIDDEN .value(),
+                HttpStatus.FORBIDDEN.getReasonPhrase(),
                 ex.getMessage(),
                 request.getRequestURI()
         );
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

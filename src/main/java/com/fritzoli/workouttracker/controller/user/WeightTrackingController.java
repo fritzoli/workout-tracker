@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.controller;
+package com.fritzoli.workouttracker.controller.user;
 
 import com.fritzoli.workouttracker.model.user.IUser;
 import com.fritzoli.workouttracker.service.WeightTrackingService;

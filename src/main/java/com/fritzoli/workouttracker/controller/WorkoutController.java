@@ -22,7 +22,7 @@ public class WorkoutController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkoutResponse> createWorkout(
+    public ResponseEntity<?> createWorkout(
             @RequestBody @Valid CreateWorkoutRequest request,
             @AuthenticationPrincipal User userDetails) {
 
@@ -40,12 +40,29 @@ public class WorkoutController {
     }
 
     @PatchMapping("/{workoutId}")
-    public ResponseEntity<WorkoutResponse> updateWorkout(
+    public ResponseEntity<?> updateWorkout(
             @PathVariable String workoutId,
             @RequestBody @Valid UpdateWorkoutRequest request,
             @AuthenticationPrincipal IUser userDetails) {
 
         var response = workoutService.updateWorkout(workoutId, request, userDetails);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{workoutId}")
+    public ResponseEntity<?> getWorkout(
+            @PathVariable String workoutId,
+            @AuthenticationPrincipal IUser userDetails) {
+
+        var response = workoutService.getWorkout(workoutId, userDetails);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping()
+    public ResponseEntity<?> getAllWorkoutsForUser(
+            @AuthenticationPrincipal IUser userDetails) {
+
+        var response = workoutService.getAllWorkoutsForUser(userDetails);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

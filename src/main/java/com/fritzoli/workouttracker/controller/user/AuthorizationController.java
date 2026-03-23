@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.controller;
+package com.fritzoli.workouttracker.controller.user;
 
 import com.fritzoli.workouttracker.dto.request.user.BasicLoginRequest;
 import com.fritzoli.workouttracker.dto.request.user.RegisterRequest;
