@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
@@ -17,6 +18,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Service
+@Slf4j
 public class JWTService {
     private String secretKey = "";
 
@@ -27,6 +29,7 @@ public class JWTService {
             SecretKey sk = keyGen.generateKey();
             secretKey = Base64.getUrlEncoder().withoutPadding().encodeToString(sk.getEncoded());
         } catch (NoSuchAlgorithmException e) {
+            log.error("Invalid algorithm for JWT-key generation", e);
             throw new RuntimeException(e);
         }
     }

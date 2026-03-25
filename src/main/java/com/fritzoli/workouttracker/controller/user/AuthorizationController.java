@@ -1,7 +1,7 @@
-package com.fritzoli.workouttracker.controller;
+package com.fritzoli.workouttracker.controller.user;
 
-import com.fritzoli.workouttracker.dto.request.BasicLoginRequest;
-import com.fritzoli.workouttracker.dto.request.RegisterRequest;
+import com.fritzoli.workouttracker.dto.request.user.BasicLoginRequest;
+import com.fritzoli.workouttracker.dto.request.user.RegisterRequest;
 import com.fritzoli.workouttracker.dto.response.UserResponse;
 import com.fritzoli.workouttracker.service.jwt.AuthorizationService;
 import jakarta.validation.Valid;

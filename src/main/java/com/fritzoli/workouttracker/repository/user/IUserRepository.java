@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.repository;
+package com.fritzoli.workouttracker.repository.user;
 
 import com.fritzoli.workouttracker.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,81 +1,75 @@
 package com.fritzoli.workouttracker.service;
 
-import com.fritzoli.workouttracker.dto.request.ExerciseRequest;
-import com.fritzoli.workouttracker.dto.response.ExerciseResponse;
-import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
+import com.fritzoli.workouttracker.dto.request.workout.CreateWorkoutRequest;
+import com.fritzoli.workouttracker.dto.request.workout.UpdateWorkoutRequest;
+import com.fritzoli.workouttracker.dto.response.WorkoutResponse;
 import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
-import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
 import com.fritzoli.workouttracker.model.user.IUser;
-import com.fritzoli.workouttracker.model.workout.Exercise;
-import com.fritzoli.workouttracker.repository.IExerciseRepository;
-import com.fritzoli.workouttracker.repository.IUserRepository;
+import com.fritzoli.workouttracker.model.user.User;
+import com.fritzoli.workouttracker.model.workout.Workout;
+import com.fritzoli.workouttracker.repository.workout.IWorkoutRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class WorkoutService {
-    private final IExerciseRepository exerciseRepository;
-    private final IUserRepository userRepository;
+    private final IWorkoutRepository workoutRepository;
 
-    public WorkoutService(IExerciseRepository exerciseRepository, IUserRepository userRepository) {
-        this.exerciseRepository = exerciseRepository;
-        this.userRepository = userRepository;
+    public WorkoutService(IWorkoutRepository workoutRepository) {
+        this.workoutRepository = workoutRepository;
     }
 
-    public ExerciseResponse createExercise(ExerciseRequest exercise, IUser userDetails) {
-        var e = exerciseRepository.findExerciseByTitleAndId(exercise.title(), userDetails.getId());
+    public WorkoutResponse createWorkout(CreateWorkoutRequest request, User userDetails) {
+        String comment = request.comment() != null ? request.comment() : "";
+        var workout = new Workout(request.name(), comment ,userDetails);
 
-        if (e.isPresent())
-            throw new ResourceAlreadyExistsException("Exercise already exists");
+        Optional<Workout> workoutWithSameName = workoutRepository.findByNameAndUserId(request.name(), userDetails.getId());
 
-        var user = userRepository.getReferenceById(userDetails.getId());
-        Exercise res = new Exercise(user, exercise.title(), exercise.description());
-        exerciseRepository.save(res);
+        if (workoutWithSameName.isPresent())
+            throw new IllegalArgumentException("A workout with the same name already exists");
 
-        return new ExerciseResponse(res.getId(), res.getTitle(), res.getDescription(), res.getCreationdate());
+        var res = workoutRepository.save(workout);
+
+        return new WorkoutResponse(res.getId(), res.getName() ,res.getComment() , res.getCreatediondate());
     }
 
-    public void deleteExercise(String id, IUser userDetails) {
-        var exercise = exerciseRepository.findById(id);
+    public void deleteWorkout(String workoutId, IUser user) {
+        workoutRepository.findByIdAndUserId(workoutId, user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Unable to find a workout with that id"));
 
-        if (exercise.isEmpty())
-            throw new ResourceNotFoundException("Exercise not found");
-
-        // Prevents other users from deleting exercises
-        if (!exercise.get().getUser().getId().equals(userDetails.getId()))
-            throw new UserNotAuthenticatedException("Wrong Exercise id");
-
-        exerciseRepository.delete(exercise.get());
-
+        workoutRepository.deleteById(workoutId);
     }
 
-    public ExerciseResponse updateExercise(String id, ExerciseRequest request, IUser userDetails) {
-        var e = exerciseRepository.findById(id);
+    public WorkoutResponse updateWorkout(String workoutId, @Valid UpdateWorkoutRequest request, IUser user) {
+        Workout workout = workoutRepository.findByIdAndUserId(workoutId, user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Unable to find a workout with that id"));
 
-        if (e.isEmpty())
-            throw new ResourceNotFoundException("Exercise not found");
+        Optional<Workout> workoutWithSameName = workoutRepository.findByNameAndUserId(request.getName().get(), user.getId());
 
-        var exercise = e.get();
+        if (workoutWithSameName.isPresent())
+            throw new IllegalArgumentException("There is already a workout with that name");
 
-        // Prevents other users from deleting exercises
-        if (!exercise.getUser().getId().equals(userDetails.getId())) {
-            throw new UserNotAuthenticatedException("Wrong Exercise id");
-        }
+        request.getComment().ifProvided(workout::setComment);
+        request.getName().ifProvided(workout::setName);
 
-        if (request.title() != null) exercise.setTitle(request.title());
-        if (request.description() != null) exercise.setDescription(request.description());
-        exerciseRepository.save(exercise);
+        Workout res = workoutRepository.save(workout);
 
-        return new ExerciseResponse(exercise.getId(), exercise.getTitle(), exercise.getDescription(), exercise.getCreationdate());
+        return new WorkoutResponse(res.getId(), res.getName() ,res.getComment() , res.getCreatediondate());
     }
 
-    public Iterable<ExerciseResponse> getExercises(int page,int size, IUser userDetails) {
-        var exercises = exerciseRepository.findExerciseByUserId(userDetails.getId(), page, size);
+    public WorkoutResponse getWorkoutResponse(String workoutId, IUser user) {
+        Workout workout = getWorkout(workoutId, user);
+        return new WorkoutResponse(workout.getId(), workout.getName(), workout.getComment(), workout.getCreatediondate());
+    }
 
-        if (exercises == null)
-            throw new ResourceNotFoundException("The user doesn't have any exercises");
+    public Workout getWorkout(String workoutId, IUser user) {
+        return workoutRepository.findByIdAndUserId(workoutId, user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Unable to find a workout with that id"));
+    }
 
-        return exercises;
+    public Iterable<WorkoutResponse> getAllWorkoutsForUser(IUser userDetails) {
+        return workoutRepository.findAllByUserId(userDetails.getId());
     }
 }
-
-

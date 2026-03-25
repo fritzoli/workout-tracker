@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.dto.request;
+package com.fritzoli.workouttracker.dto.request.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

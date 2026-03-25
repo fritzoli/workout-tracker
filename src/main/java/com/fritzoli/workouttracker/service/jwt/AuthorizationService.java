@@ -1,13 +1,13 @@
 package com.fritzoli.workouttracker.service.jwt;
 
-import com.fritzoli.workouttracker.dto.request.BasicLoginRequest;
-import com.fritzoli.workouttracker.dto.request.RegisterRequest;
+import com.fritzoli.workouttracker.dto.request.user.BasicLoginRequest;
+import com.fritzoli.workouttracker.dto.request.user.RegisterRequest;
 import com.fritzoli.workouttracker.dto.response.UserResponse;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
 import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
 import com.fritzoli.workouttracker.model.user.User;
-import com.fritzoli.workouttracker.repository.IUserRepository;
+import com.fritzoli.workouttracker.repository.user.IUserRepository;
 import com.fritzoli.workouttracker.service.mail.MailService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,8 +37,11 @@ public class AuthorizationService {
     }
 
     public void register(RegisterRequest user) {
-        if (repo.findByUsername(user.username()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the name: " + user.username());
-        if (repo.findByEmail(user.email()).isPresent()) throw new ResourceAlreadyExistsException("There already is a user with the email: " + user.email());
+        if (repo.findByUsername(user.username()).isPresent())
+            throw new ResourceAlreadyExistsException("There already is a user with the name: " + user.username());
+
+        if (repo.findByEmail(user.email()).isPresent())
+            throw new ResourceAlreadyExistsException("There already is a user with the email: " + user.email());
 
         User entity = new User(user.username(), user.password(), user.email());
         entity.setPassword(encoder.encode(user.password()));
@@ -77,6 +80,7 @@ public class AuthorizationService {
 
         if (user.isEmpty())
             throw new ResourceNotFoundException("There is no user with the name: " + userName);
+
         if (user.get().isEnabled())
             throw new ResourceAlreadyExistsException("The user with the name: " + userName + " is already verified");
 

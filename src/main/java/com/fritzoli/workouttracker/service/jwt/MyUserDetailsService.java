@@ -2,7 +2,7 @@ package com.fritzoli.workouttracker.service.jwt;
 
 import com.fritzoli.workouttracker.model.user.IUser;
 import com.fritzoli.workouttracker.model.user.User;
-import com.fritzoli.workouttracker.repository.IUserRepository;
+import com.fritzoli.workouttracker.repository.user.IUserRepository;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

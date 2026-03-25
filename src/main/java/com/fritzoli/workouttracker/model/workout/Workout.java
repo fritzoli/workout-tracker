@@ -20,6 +20,9 @@ public class Workout {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(nullable = false, unique = true)
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
@@ -30,4 +33,10 @@ public class Workout {
     @CreationTimestamp
     @Column(name = "creation_date")
     private LocalDateTime creatediondate;
+
+    public Workout(String name, String comment, User user) {
+        this.name = name;
+        this.comment = comment;
+        this.user = user;
+    }
 }
