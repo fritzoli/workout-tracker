@@ -59,11 +59,14 @@ public class WorkoutService {
         return new WorkoutResponse(res.getId(), res.getName() ,res.getComment() , res.getCreatediondate());
     }
 
-    public WorkoutResponse getWorkout(String workoutId, IUser user) {
-        Workout workout = workoutRepository.findByIdAndUserId(workoutId, user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Unable to find a workout with that id"));
-
+    public WorkoutResponse getWorkoutResponse(String workoutId, IUser user) {
+        Workout workout = getWorkout(workoutId, user);
         return new WorkoutResponse(workout.getId(), workout.getName(), workout.getComment(), workout.getCreatediondate());
+    }
+
+    public Workout getWorkout(String workoutId, IUser user) {
+        return workoutRepository.findByIdAndUserId(workoutId, user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Unable to find a workout with that id"));
     }
 
     public Iterable<WorkoutResponse> getAllWorkoutsForUser(IUser userDetails) {

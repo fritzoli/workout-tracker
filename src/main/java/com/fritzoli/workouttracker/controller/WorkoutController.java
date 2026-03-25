@@ -54,7 +54,7 @@ public class WorkoutController {
             @PathVariable String workoutId,
             @AuthenticationPrincipal IUser userDetails) {
 
-        var response = workoutService.getWorkout(workoutId, userDetails);
+        var response = workoutService.getWorkoutResponse(workoutId, userDetails);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

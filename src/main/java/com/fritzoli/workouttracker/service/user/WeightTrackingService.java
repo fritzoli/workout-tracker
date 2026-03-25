@@ -1,4 +1,4 @@
-package com.fritzoli.workouttracker.service;
+package com.fritzoli.workouttracker.service.user;
 
 import com.fritzoli.workouttracker.dto.response.WeightResponse;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;

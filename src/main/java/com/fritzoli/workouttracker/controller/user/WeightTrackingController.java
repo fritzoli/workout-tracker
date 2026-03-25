@@ -1,7 +1,7 @@
 package com.fritzoli.workouttracker.controller.user;
 
 import com.fritzoli.workouttracker.model.user.IUser;
-import com.fritzoli.workouttracker.service.WeightTrackingService;
+import com.fritzoli.workouttracker.service.user.WeightTrackingService;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

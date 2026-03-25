@@ -22,7 +22,7 @@ public class ExerciseService {
     }
 
     public ExerciseResponse createExercise(ExerciseRequest exercise, IUser userDetails) {
-        var e = exerciseRepository.findExerciseByTitleAndId(exercise.title(), userDetails.getId());
+        var e = exerciseRepository.findExerciseByTitleAndUserId(exercise.title(), userDetails.getId());
 
         if (e.isPresent())
             throw new ResourceAlreadyExistsException("Exercise already exists");
@@ -69,21 +69,21 @@ public class ExerciseService {
     }
 
     public Iterable<ExerciseResponse> getExercises(int page,int size, IUser userDetails) {
-        var exercises = exerciseRepository.findExerciseByUserId(userDetails.getId(), page, size);
-
-        if (exercises == null)
-            throw new ResourceNotFoundException("The user doesn't have any exercises");
-
-        return exercises;
+        return exerciseRepository.findExerciseByUserId(userDetails.getId(), page, size);
     }
 
-    public ExerciseResponse getExerciseById(String id, IUser userDetails) {
+    public Exercise getExerciseById(String id, IUser userDetails) {
         var exercise = exerciseRepository.findById(id);
 
         if (exercise.isEmpty() || !exercise.get().getUser().getId().equals(userDetails.getId()))
             throw new ResourceNotFoundException("Exercise not found");
 
-        var e = exercise.get();
+        return exercise.get();
+    }
+
+    public ExerciseResponse getExerciseByIdResponse(String id, IUser userDetails) {
+        var e = getExerciseById(id, userDetails);
+
         return new ExerciseResponse(e.getId(), e.getTitle(), e.getDescription(), e.getCreationdate());
     }
 }

@@ -63,7 +63,7 @@ public class ExerciseController {
     public ResponseEntity<ExerciseResponse> getExerciseById(
             @PathVariable String id,
             @AuthenticationPrincipal IUser userDetails) {
-        var res = exerciseService.getExerciseById(id, userDetails);
+        var res = exerciseService.getExerciseByIdResponse(id, userDetails);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }
