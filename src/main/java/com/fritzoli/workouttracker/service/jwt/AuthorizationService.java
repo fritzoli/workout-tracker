@@ -6,9 +6,12 @@ import com.fritzoli.workouttracker.dto.response.UserResponse;
 import com.fritzoli.workouttracker.exception.custom.ResourceAlreadyExistsException;
 import com.fritzoli.workouttracker.exception.custom.ResourceNotFoundException;
 import com.fritzoli.workouttracker.exception.custom.UserNotAuthenticatedException;
+import com.fritzoli.workouttracker.model.user.IUser;
 import com.fritzoli.workouttracker.model.user.User;
 import com.fritzoli.workouttracker.repository.user.IUserRepository;
 import com.fritzoli.workouttracker.service.mail.MailService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -89,5 +92,14 @@ public class AuthorizationService {
         repo.save(entity);
 
         return new UserResponse(entity.getUsername(), entity.getEmail(), entity.getRole(), entity.getCreationdate());
+    }
+
+    public Boolean isAuthenticated(IUser user) {
+        if(user == null)
+            return false;
+
+        return repo.findByUsername(user.getUsername())
+                .map(User::isEnabled)
+                .orElse(false);
     }
 }

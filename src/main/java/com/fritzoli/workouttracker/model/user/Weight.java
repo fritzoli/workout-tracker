@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "WEIGHT")
@@ -26,6 +28,10 @@ public class Weight {
     @Column(name = "creation_date")
     @CreationTimestamp
     private LocalDate creationDate;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedat;
 
     @Column(nullable = false)
     private double weight;

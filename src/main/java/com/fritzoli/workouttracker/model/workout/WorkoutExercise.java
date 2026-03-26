@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -39,6 +40,10 @@ public class WorkoutExercise {
     @CreationTimestamp
     @Column(name = "creation_date")
     private LocalDateTime creationdate;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedat;
 
     public WorkoutExercise(Exercise exercise, Workout workout, int sets, int reps, int rpe) {
         this.exercise = exercise;

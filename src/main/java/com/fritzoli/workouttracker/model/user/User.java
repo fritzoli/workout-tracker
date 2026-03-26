@@ -3,6 +3,7 @@ package com.fritzoli.workouttracker.model.user;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -32,12 +33,15 @@ public class User implements IUser {
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
 
-    @Column(name = "enabled")
     private boolean enabled = false;
 
     @CreationTimestamp
     @Column(name = "creation_date")
     private LocalDateTime creationdate;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedat;
 
     public User(String username, String password, String email) {
         this.username = username;

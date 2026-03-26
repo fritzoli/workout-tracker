@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record BasicLoginRequest(
-    @NotBlank(message = "Username cannot be empty")
+    @NotBlank(message = "Name should not be empty")
     String username,
 
     @NotNull(message = "Invalid password")
